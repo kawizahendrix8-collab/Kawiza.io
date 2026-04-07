@@ -1,0 +1,110 @@
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <title> pomo time</title>
+   </head>
+   <style>
+     body {
+       font-family: Times New Roman;
+       background-color: #714433;
+       text-align: center;
+       padding: 0;
+       margin: 0;
+     }
+     header {
+       background-color:#441400 ;
+       padding: 15px;
+     }
+     #modedisply {
+       font-size: 40px;
+       color: black;
+       margin-top: 20px;
+     }
+     #countdown {
+       font-size: 80px;
+       font-weight: bold;
+       color: white;
+     }
+     button {
+       margin: 10px;
+       padding: 15px;
+       border: none;
+       border-radius: 10px;
+       font-weight: bold;
+       background-color:black;
+       color: white;
+       cursor: pointer;
+     }
+     #alert {
+       color: white;
+       font-size:30px ;
+       margin-top: 20px;
+     }
+   </style>
+   <body>
+     <header class="fade">
+       <h1>Pomo title</h1>
+     </header>
+     <main>
+       <div id="modedisply">Work session</div><br>
+       <div id="countdown">25:00</div><br>
+       <button id="startbtn">Start</button>
+       <button id="pausebtn">Pause</button>
+       <button id="resetbtn">Reset</button>
+       <div id="alertbox"></div>
+     </main>
+     <script>
+       let modedisply = document.querySelector("#modedisply");
+       let countdown = document.querySelector("#countdown");
+       const startbtn = document.querySelector("#startbtn");
+       const pausebtn = document.querySelector("#pausebtn");
+       const resetbtn = document.querySelector("#resetbtn");
+       const alertbox =document. querySelector("#alertbox");
+       let secondsLeft = 1500
+ let isRunning = false
+let timer = null
+ function updateDisplay() {
+   const minutes = Math.floor(secondsLeft / 60);
+   const seconds = secondsLeft % 60;
+   let secondsDisplay;
+if (seconds < 10) {
+  secondsDisplay = "0" + seconds;
+} else {
+  secondsDisplay = seconds;
+}
+   countdown.textContent = minutes + ":" + secondsDisplay;
+   
+ }
+ updateDisplay()
+ startbtn.addEventListener("click", function() {
+   if (isRunning == true) {
+     return;
+   }
+   isRunning = true;
+timer = setInterval(function() {
+  secondsLeft = secondsLeft - 1;
+  if (secondsLeft === 0) {
+    clearInterval(timer);
+    isRunning = false;
+    alertbox.textContent = "Break time!  5 minutes";
+    secondsLeft = 300;
+    updateDisplay();
+  }
+  updateDisplay();
+}, 10);
+});
+pausebtn.addEventListener("click",
+function() {
+  clearInterval(timer);
+  isRunning = false;
+});
+resetbtn.addEventListener("click",
+function() {
+  clearInterval(timer);
+  isRunning = false;
+secondsLeft = 1500;
+updateDisplay();
+});
+     </script>
+   </body>
+ </html>
