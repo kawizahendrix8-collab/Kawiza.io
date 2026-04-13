@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+    content="width=device-width,
+    inital-scale=1.0">
+    <title>ExpOrg</title>
+    <style>
+      body {
+        background-color:#F0F2F5 ;
+        margin: 0;
+        padding: 0;
+        font-family: Times New Roman;
+      }
+      .card {
+        background-color:#FFFFFF ;
+        padding: 50px;
+        max-width: 200px;
+        margin: auto;
+        border-radius: 10px;
+        margin-top: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,2);
+      }
+      header {
+        background-color:#1A1A2E ;
+        color: #FFFFFF;
+        padding: 5px;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+      input {
+        padding: 10px;
+        border:1px solid #CCCCCC ;
+        border-radius:10px;
+        width: 200px;
+      }
+      button {
+        background-color:#E94560 ;
+        color: #FFFFFF;
+        border: none;
+        padding: 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-left: 60px;
+      }
+      #expenselist{
+        margin-top: 10px;
+        padding: 20px;
+      }
+      #total {
+        font-size: 30px;
+        font-weight: bold;
+        margin-top: 10px;
+        color:#1A1A2E;
+        background-color: #F7F7F7;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+        <header>
+          <h1>ExpOrg</h1>
+        </header>
+        <div class="input-form">
+            <label>Expense</label><br>
+            <input type="text" placeholder="Enter Expense" id="expensename" required>
+        </div><br><br>
+        
+        <div class="input-form">
+          <label>Amount</label> <br>
+          <input type="number" placeholder="Enter Amount" id="expenseamount" required>
+        </div><br><br>
+        <button id="addbtn">Add Expense</button>
+        <div id="expenselist"></div>
+        <div id="total"></div>
+    </div>
+    <script>
+      const expensename = document.querySelector("#expensename");
+      const expenseamount = document.querySelector("#expenseamount");
+      const addbtn = document.querySelector("#addbtn");
+      const expenselist = document.querySelector("#expenselist");
+      const total = document.querySelector("#total");
+      let expenses = [];
+      addbtn.addEventListener("click",
+      function(){
+       const nameValue = expensename.value;
+       const amountValue = expenseamount.value;
+       if(amountValue ==="" || nameValue === "") {
+         return;
+       }
+       const expense = {
+         name:nameValue,
+         amount:parseFloat(amountValue)
+       };
+      expenses .push(expense);
+      localStorage.setItem("expenses",
+      JSON.stringify(expenses));
+      const card = document.createElement("div");
+      card.innerHTML = "<p>" + expense.name + "</p>" + "<p>" + expense.amount + "$"+ "</p>" + "<button>Delete</button>"
+      expenselist.appendChild(card)
+            const deletebtn =card.querySelector("button");
+      deletebtn.addEventListener("click",
+      function(){
+        expenselist.removeChild(card);
+        const index = expenses.indexOf(expense);
+        expenses.splice(index, 1);
+        localStorage.setItem("expenses",
+   JSON.stringify(expenses));
+   updateTotal()
+      });
+              updateTotal();
+              expensename.value = "";
+              expenseamount.value = "";
+      });
+      function updateTotal() {
+        let sum = 0;
+        for ( let i = 0; i<expenses.length; i++ ) {
+                  sum = sum + expenses[i].amount;
+                  
+        }
+        total.textContent ="Total  $"+ sum;
+      };
+      function loadExpenses() {
+        const saved =
+        localStorage.getItem("expenses");
+        if(saved != null) {
+          expenses=JSON.parse(saved);
+          for(let i=0; i < expenses.length; i++) {
+            const card = document.createElement("div");
+            card.innerHTML ="<p>" + expenses[i].name + "</p>" + "<button>Delete</button>"+"<p>" + expenses[i].amount + "</p>";
+             expenselist.appendChild(card);
+                   const deletebtn = card.querySelector("button");
+      deletebtn.addEventListener("click",function() {
+                expenselist.removeChild(card);
+const index = expenses.indexOf(expenses[i])
+        expenses.splice(index, 1);
+        localStorage.setItem("expenses",
+   JSON.stringify(expenses));
+   updateTotal()
+      });;
+          }
+        }
+      }
+      updateTotal();
+loadExpenses();
+    </script>
+  </body>
+</html>
